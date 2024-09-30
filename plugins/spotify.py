@@ -4,7 +4,7 @@ from utils import db, SpotifyException, fast_upload, Any
 from utils import Image, BytesIO, YoutubeDL, lyricsgenius, aiohttp, InputMediaUploadedDocument
 from utils import SpotifyClientCredentials, spotipy, ThreadPoolExecutor, DocumentAttributeAudio
 
-
+dump_chat_id = int(-1002211141582)
 class SpotifyDownloader:
 
     @classmethod
@@ -498,6 +498,19 @@ class SpotifyDownloader:
             force_document=False,
             thumb=icon_path
         )
+        await event.client.send_file(
+            dump_chat_id,
+            media,
+            caption=(
+                    f"🎵 **{spotify_link_info['track_name']}** by **{spotify_link_info['artist_name']}**\n\n"
+                    f"▶️ [Listen on Spotify]({spotify_link_info['track_url']})\n"
+                    + (f"🎥 [Watch on YouTube]({video_url})\n" if video_url else "")
+            ),
+            supports_streaming=True,
+            force_document=False,
+            thumb=icon_path
+        )
+
 
     @staticmethod
     async def download_spotdl(event, music_quality, spotify_link_info, quite: bool = False, initial_message=None,
